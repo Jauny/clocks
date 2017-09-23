@@ -27,6 +27,38 @@ class Clock {
   }
 }
 
+class Clock2 {
+  static draw(canvas, ctx) {
+    ctx.save()
+    ctx.translate(canvas.width / 2, canvas.height / 2)
+
+    const hourSpacing = 86400 * canvas.width
+
+    // draw 12 hour marks
+    for (let i = 1; i <= 12; i++) {
+      ctx.strokeStyle = 'DimGray'
+      ctx.beginPath()
+      ctx.setLineDash([3, 15])
+      ctx.arc(0, 0, i * 3600 / 86400 * canvas.width, 0, Math.PI * 2)
+      ctx.stroke()
+      ctx.setLineDash([])
+    }
+
+    const time = new Date()
+    const h = time.getHours() % 12 * 3600
+    const m = time.getMinutes() * 60
+    const s = time.getSeconds()
+    const ts = h + m + s
+
+    ctx.strokeStyle = 'red'
+    ctx.beginPath()
+    ctx.arc(0, 0, ts / 86400 * canvas.width, 0, Math.PI * 2)
+    ctx.stroke()
+
+    ctx.restore()
+  }
+}
+
 /*
  * Rendering base.
  *
@@ -35,11 +67,15 @@ class Clock {
  * setup is a one time call to select the canvas DOM element
  * and start a loop 30 times / second.
  */
-const draw = (canvas, ctx) => {
+const draw = (canvas, ctx, canvas2, ctx2) => {
   ctx.fillStyle = 'black'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  ctx2.fillStyle = 'black'
+  ctx2.fillRect(0, 0, canvas2.width, canvas2.height)
   
   Clock.draw(canvas, ctx)
+  Clock2.draw(canvas2, ctx2)
 }
 
 const setup = () => {
@@ -47,9 +83,12 @@ const setup = () => {
   const canvas = document.getElementById('canvas')
   const ctx = canvas.getContext('2d')
 
+  const canvas2 = document.getElementById('canvas2')
+  const ctx2 = canvas2.getContext('2d')
+
   // setup the rendering loop
   window.setInterval(() => {
-    draw(canvas, ctx)
+    draw(canvas, ctx, canvas2, ctx2)
   }, 1000/60)
 
   // listener for mouse click
