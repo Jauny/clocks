@@ -1,6 +1,6 @@
 class Clock {
   static draw(canvas, ctx) {
-    const spacing = canvas.width / 60;
+    const spacing = canvas.width / 59;
 
     ctx.save()
     ctx.translate(0, (canvas.height - spacing) / 2);
@@ -20,7 +20,7 @@ class Clock {
   static drawUnit(ctx, spacing, height, u, color) {
     ctx.fillStyle = color
     let x = 0;
-    for (let unit = 0; unit <= u; unit++) {
+    for (let unit = 1; unit <= u; unit++) {
       ctx.fillRect(x, height, spacing - 1, spacing)
       x += spacing
     }
