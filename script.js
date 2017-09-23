@@ -1,9 +1,9 @@
 class Clock {
   static draw(canvas, ctx) {
-    ctx.save()
-    ctx.translate(0, canvas.height/2);
-
     const spacing = canvas.width / 60;
+
+    ctx.save()
+    ctx.translate(0, (canvas.height - spacing) / 2);
 
     const time = new Date()
     const h = time.getHours()
