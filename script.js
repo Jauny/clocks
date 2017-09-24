@@ -59,6 +59,36 @@ class Clock2 {
   }
 }
 
+class Clock3 {
+  static draw(canvas, ctx) {
+    ctx.save()
+    ctx.translate(canvas.width / 2, canvas.height / 2)
+
+    const time = new Date()
+    const h = time.getHours() % 12 * 3600
+    const m = time.getMinutes() * 60
+    const s = time.getSeconds()
+    const ts = h + m + s
+
+    const arcCircumference = 2 * Math.PI * (canvas.width / 3)
+    const dotSpacing = arcCircumference / (24 * 6)
+    ctx.strokeStyle = 'white'
+    ctx.beginPath()
+    ctx.setLineDash([1, dotSpacing])
+    ctx.arc(0, 0, canvas.height/3, 0, Math.PI * 2)
+    ctx.stroke()
+    ctx.setLineDash([])
+
+    ctx.strokeStyle = 'blue'
+    ctx.rotate((ts / 86400) * (Math.PI * 2))
+    ctx.beginPath()
+    ctx.moveTo(0, 0)
+    ctx.lineTo(0, -canvas.height/3);
+    ctx.stroke();
+    ctx.restore()
+  }
+}
+
 /*
  * Rendering base.
  *
@@ -67,15 +97,19 @@ class Clock2 {
  * setup is a one time call to select the canvas DOM element
  * and start a loop 30 times / second.
  */
-const draw = (canvas, ctx, canvas2, ctx2) => {
+const draw = (canvas, ctx, canvas2, ctx2, canvas3, ctx3) => {
   ctx.fillStyle = 'black'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
   ctx2.fillStyle = 'black'
   ctx2.fillRect(0, 0, canvas2.width, canvas2.height)
+
+  ctx3.fillStyle = 'black'
+  ctx3.fillRect(0, 0, canvas3.width, canvas3.height)
   
   Clock.draw(canvas, ctx)
   Clock2.draw(canvas2, ctx2)
+  Clock3.draw(canvas3, ctx3)
 }
 
 const setup = () => {
@@ -86,9 +120,12 @@ const setup = () => {
   const canvas2 = document.getElementById('canvas2')
   const ctx2 = canvas2.getContext('2d')
 
+  const canvas3 = document.getElementById('canvas3')
+  const ctx3 = canvas3.getContext('2d')
+
   // setup the rendering loop
   window.setInterval(() => {
-    draw(canvas, ctx, canvas2, ctx2)
+    draw(canvas, ctx, canvas2, ctx2, canvas3, ctx3)
   }, 1000/60)
 
   // listener for mouse click
