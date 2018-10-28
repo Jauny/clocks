@@ -89,6 +89,27 @@ class Clock3 {
   }
 }
 
+class Clock4 {
+  static draw(canvas, ctx) {
+    ctx.save()
+
+    const time = new Date()
+    const h = ('0'  + time.getHours()).slice(-2)
+    const m = ('0' + time.getMinutes()).slice(-2)
+    const s = ('0' + time.getSeconds()).slice(-2)
+    const hex = h + m + s
+
+    ctx.fillStyle = '#' + hex
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = '#' + hex.slice(-2) + hex.slice(0, -2)
+    ctx.font = '30px Arial'
+    ctx.textAlign = 'center'
+    ctx.fillText('#' + hex, canvas.width/2, canvas.height/2)
+
+    ctx.restore()
+  }
+}
+
 /*
  * Rendering base.
  *
@@ -97,7 +118,7 @@ class Clock3 {
  * setup is a one time call to select the canvas DOM element
  * and start a loop 30 times / second.
  */
-const draw = (canvas, ctx, canvas2, ctx2, canvas3, ctx3) => {
+const draw = (canvas, ctx, canvas2, ctx2, canvas3, ctx3, canvas4, ctx4) => {
   ctx.fillStyle = 'black'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -110,6 +131,7 @@ const draw = (canvas, ctx, canvas2, ctx2, canvas3, ctx3) => {
   Clock.draw(canvas, ctx)
   Clock2.draw(canvas2, ctx2)
   Clock3.draw(canvas3, ctx3)
+  Clock4.draw(canvas4, ctx4)
 }
 
 const setup = () => {
@@ -123,9 +145,12 @@ const setup = () => {
   const canvas3 = document.getElementById('canvas3')
   const ctx3 = canvas3.getContext('2d')
 
+  const canvas4 = document.getElementById('canvas4')
+  const ctx4 = canvas4.getContext('2d')
+
   // setup the rendering loop
   window.setInterval(() => {
-    draw(canvas, ctx, canvas2, ctx2, canvas3, ctx3)
+    draw(canvas, ctx, canvas2, ctx2, canvas3, ctx3, canvas4, ctx4)
   }, 1000/60)
 
   // listener for mouse click
